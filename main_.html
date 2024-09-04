@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4389/4389181.png" type="image/png">
+    <title>Chat Rooms</title>
+    <style>
+        body {
+            color-scheme: light dark;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: light-dark( #3e3e5e ,#1e1e2f );
+            color: light-dark(#a5a5c5,#f5f5f5);
+            margin: 0;
+            padding: 20px;
+        }
+
+        .chat-room {
+            background-color: light-dark( #57577d,#2c2c3e);
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-room button {
+            background-color: light-dark( #3f3f61,#3e3e5e);
+            color: light-dark(#a5a5c5,#f5f5f5);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .chat-room button:hover {
+            background-color: light-dark(#4c4c6f,#57577d);
+        }
+
+        .online-users {
+            font-size: 14px;
+            color: light-dark(#9797ba,#a5a5c5);
+        }
+    </style>
+    <!-- Firebase SDKs -->
+    <script type="module">
+        // Firebase SDK 불러오기
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+
+        const firebaseConfigs = {
+            chatRoom1: {
+                apiKey: "AIzaSyAgDOYHoR4qXv0UoZy5T0ut55lTOXIgh-g",
+                authDomain: "serverchat-31bb7.firebaseapp.com",
+                databaseURL: "https://serverchat-31bb7-default-rtdb.firebaseio.com",
+                projectId: "serverchat-31bb7",
+                storageBucket: "serverchat-31bb7.appspot.com",
+                messagingSenderId: "101937249421",
+                appId: "1:101937249421:web:57cfb402853ce0b6c3f6c4",
+                measurementId: "G-0MDWLVTLCS"
+            },
+            chatRoom2: {
+                apiKey: "AIzaSyDRxS74TWQqK7CPoDPmkdsbC6Ig_3zYR7g",
+                authDomain: "chatserver-5318d.firebaseapp.com",
+                databaseURL: "https://chatserver-5318d-default-rtdb.firebaseio.com",
+                projectId: "chatserver-5318d",
+                storageBucket: "chatserver-5318d.appspot.com",
+                messagingSenderId: "765021240977",
+                appId: "1:765021240977:web:65287fd3b91ee246af0930",
+                measurementId: "G-YKBT6SHXX5"
+            },
+            chatRoom3: {
+                apiKey: "AIzaSyCwLuKY2GPSBEC2MozVFd-DAsdzgGx_3wI",
+                authDomain: "chatroom-4a212.firebaseapp.com",
+                projectId: "chatroom-4a212",
+                storageBucket: "chatroom-4a212.appspot.com",
+                messagingSenderId: "228740989290",
+                appId: "1:228740989290:web:9f5e70cc969eee8fd72513",
+                measurementId: "G-4SS1MYC078"
+            },
+            chatRoom4: {
+                apiKey: "AIzaSyCGE5mDE-_I_nx_r-IWXvMn1Zia0WeVBo0",
+                authDomain: "roomchat-e7c02.firebaseapp.com",
+                databaseURL: "https://roomchat-e7c02-default-rtdb.firebaseio.com",
+                projectId: "roomchat-e7c02",
+                storageBucket: "roomchat-e7c02.appspot.com",
+                messagingSenderId: "59279141337",
+                appId: "1:59279141337:web:e18c7f2555b245749991c8",
+                measurementId: "G-2CQWB4MY7L"
+            },
+            chatRoom5: {
+                apiKey: "AIzaSyC26jDzwTYyS8tdX6Y9zureryY3WW3-nog",
+                authDomain: "serverroom-7f990.firebaseapp.com",
+                projectId: "serverroom-7f990",
+                storageBucket: "serverroom-7f990.appspot.com",
+                messagingSenderId: "1091012144816",
+                appId: "1:1091012144816:web:25154018fdf150d8e91575",
+                measurementId: "G-G0X58RHGDP"
+            }
+        };
+
+        const chatRooms = [
+            { name: 'Chat Room 1', firebaseConfig: firebaseConfigs.chatRoom1, url: "http://chat.serverchat.kro.kr" },
+            { name: 'Chat Room 2', firebaseConfig: firebaseConfigs.chatRoom2, url: "http://chat.chatserver.r-e.kr" },
+            { name: 'Chat Room 3', firebaseConfig: firebaseConfigs.chatRoom3, url: "http://chat.chatroom.kro.kr" },
+            { name: 'Chat Room 4', firebaseConfig: firebaseConfigs.chatRoom4, url: "http://chat.roomchat.kro.kr" },
+            { name: 'Chat Room 5', firebaseConfig: firebaseConfigs.chatRoom5, url: "http://chat.serverroom.kro.kr" },
+        ];
+
+        const chatRoomsContainer = document.getElementById('chat-rooms-container');
+
+        chatRooms.forEach((room, index) => {
+            const roomDiv = document.createElement('div');
+            roomDiv.className = 'chat-room';
+            roomDiv.innerHTML = `
+                <button onclick="window.location.href='${room.url}'">${room.name}</button>
+                <span class="online-users" id="online-users-${index}">Loading...</span>
+            `;
+            chatRoomsContainer.appendChild(roomDiv);
+
+            const app = initializeApp(room.firebaseConfig, `app-${index}`);
+            const database = getDatabase(app);
+            const onlineUsersRef = ref(database, 'onlineUsers');
+
+            onValue(onlineUsersRef, (snapshot) => {
+                const onlineUsersCount = snapshot.val();
+                const onlineUsersElement = document.getElementById(`online-users-${index}`);
+                if (onlineUsersCount === 1) {
+                    onlineUsersElement.textContent = `Online Users: 0`;
+                } else if (onlineUsersCount !== null) {
+                    onlineUsersElement.textContent = `Online Users: ${onlineUsersCount}`;
+                } else {
+                    onlineUsersElement.textContent = `Offline`;
+                }
+            }, (error) => {
+                console.error("Error fetching data:", error);
+                document.getElementById(`online-users-${index}`).textContent = `Offline`;
+            });
+        });
+    </script>
+</head>
+
+<body>
+
+    <h1>Chat Rooms</h1>
+    <h2>&nbsp;</h2>
+
+    <div id="chat-rooms-container"></div>
+
+</body>
+
+</html>
