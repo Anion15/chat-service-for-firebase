@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!--search SEO-->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Chat Rooms - Interactive">
+    <meta property="og:description" content="Chat room introduction and download">
+    <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/4389/4389181.png">
+    <meta property="og:url" content="http://hello0909.dothome.co.kr/download.html">
+
+    <title>Chat Rooms - Interactive</title>
+    <script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=31357"></script>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=10810"></script>
+    <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4389/4389181.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #121212;
+            color: #e0e0e0;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+            -ms-overflow-style: none;
+        }
+        
+        ::-webkit-scrollbar {
+            display: none;
+        }
+
+        section {
+            padding: 80px 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        
+        .loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            z-index: 9999;
+            transition: all 0.3s;
+        }
+
+        .intro {
+            height: 100vh;
+            background: linear-gradient(to bottom, #1e1e1e, #121212);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            color: #e0e0e0;
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .intro::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0,0,0,0.4), rgba(0,0,0,0.8));
+            z-index: 0;
+        }
+
+        .intro h1 {
+            font-size: 4em;
+            margin: 0;
+            position: relative;
+            z-index: 1;
+            text-shadow: 0 4px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        .intro p {
+            font-size: 1.5em;
+            margin: 20px 0;
+            color: #b0b0b0;
+            position: relative;
+            z-index: 1;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: #b0b0b0;
+            z-index: 1;
+        }
+
+        .scroll-indicator p {
+            margin: 0;
+            font-size: 1.2em;
+            margin-bottom: 15px; /* 간격 조정 */
+        }
+
+        .scroll-indicator .fa-arrow-down {
+            font-size: 2.5em;
+            animation: bounce 2s infinite, shake 1s infinite;
+        }
+        
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            70% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(-12px);
+            }
+        }
+
+
+        @keyframes shake {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            25% {
+                transform: translateY(-5px);
+            }
+            50% {
+                transform: translateY(5px);
+            }
+            75% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .features {
+            background: #1e1e1e;
+            padding: 40px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .feature {
+            flex: 1 1 30%;
+            margin: 20px;
+            padding: 20px;
+            text-align: center;
+            background: #2c2c2c;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            color: #e0e0e0;
+            transition: transform 0.3s, box-shadow 0.3s, opacity 0.5s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .feature[data-aos="fade-up"] {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .feature:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.7);
+        }
+
+        .feature img {
+            width: 80px;
+            margin-bottom: 20px;
+        }
+
+        .download {
+            background: #1e1e1e;
+            color: #e0e0e0;
+            padding: 60px;
+            text-align: center;
+        }
+
+        .download-button {
+            display: inline-block;
+            background-color: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            margin: 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .download-button:hover {
+            background-color: #0056b3;
+            transform: translateY(-5px);
+        }
+
+        footer {
+            padding: 20px;
+            background: #1e1e1e;
+            color: #999;
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .feature {
+                flex: 1 1 100%;
+                margin: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro h1 {
+                font-size: 2.5em;
+            }
+
+            .intro p {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading">
+        <img src="loading.gif" loop="infinite" />
+    </div>
+    <section class="intro">
+        <div class="content">
+            <h1 data-aos="fade-down" data-aos-duration="1500" 
+            style="text-shadow: 0px 0px 10px White">Chat Rooms</h1>
+            <p data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">혁신적인 소통의 시작, Chat Rooms와 함께하세요.</p>
+        </div>
+        <div class="scroll-indicator">
+            <p>Scroll Down</p>
+            <i class="fa fa-arrow-down"></i>
+        </div>
+    </section>
+    <section class="features">
+        <div class="feature" data-aos="fade-up" data-aos-duration="1000">
+            <p>&nbsp;</p>
+            <img src="https://static.vecteezy.com/system/resources/previews/009/972/879/large_2x/live-streaming-online-sign-symbol-design-free-png.png" alt="Real-time" width="100" height="40">
+            <h2>실시간 채팅</h2>
+            <p>5개의 채팅서버에서 채팅을 실시간으로 확인하세요.</p>
+            <p>언제 어디서나 연결된 경험을 제공합니다.</p>
+        </div>
+        <div class="feature" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e7/PuTTY_Icon.svg" alt="Platform" width="100" height="100">
+            <h2>다양한 플랫폼 지원</h2>
+            <p>Android와 Windows에서 ChatRooms를 만나보세요.</p>
+            <p>언제 어디서나 간편하게 이용할 수 있습니다.</p>
+            <a style="font-size: 10px;"> (추후 macOS, Linux 지원예정)</a>
+        </div>
+        <div class="feature" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/Windows_Defender_logo.svg" alt="Security" width="100" height="100">
+            <h2>보안 및 프라이버시</h2>
+            <p>귀하의 개인 정보는 google의 firebase에 안전하게 보호됩니다.</p>
+            <a style="font-size: 10px;"> (추후 AES-256 암호화 지원예정)</a>
+        </div>
+    </section>
+    <section class="download" data-aos="fade-up" data-aos-duration="1000">
+        <h2>지금 바로 다운로드하세요</h2>
+        <a href="http://hello0909.dothome.co.kr/ChatRooms.debug.v2.0.0.apk" class="download-button" data-aos="fade-up" data-aos-delay="300">Download for Android  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" alt="Android logo" width="20" height="20"></a>
+        <a href="http://hello0909.dothome.co.kr/chatrooms Setup 2.0.0.exe" class="download-button" data-aos="fade-up" data-aos-delay="500">Download for Windows  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" alt="Android logo" width="20" height="20"></a>
+    </section>
+    <footer>
+        <p>Email: <a href="mailto: vieepanouie.help@gmail.com" style="color: #999;">vieepanouie.help@gmail.com</a></p>
+        <p>개발자의 <a href="http://main.vieepanouie.kro.kr" style="color: #999;">다른 사이트</a> 놀러가기</p>
+        <p>&nbsp;</p>
+        <strong><p>&copy; 2024-<span id="current-year"></span> <a href="https://github.com/anion15" style="color: #999;">anion15</a>. All rights reserved.</p></strong>
+    </footer>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            once: true,
+            duration: 1200
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+                var currentYear = new Date().getFullYear();
+                document.getElementById('current-year').textContent = currentYear;
+            });
+        
+        window.onload = function(){
+            document.querySelector('.loading').style.visibility = 'hidden'
+            document.querySelector('.loading').style.opacity = 0
+        }
+    </script>
+</body>
+</html>
+
+<!--Written by anion, by entering this site and using all services, you acknowledge and agree that unauthorized reproduction and distribution may be subject to legal punishment. (This copyright notice is effective as of September 18, 2024.)-->
+
+<!-- The official service address for this html document is http://hello0909.dothome.co.kr/download.html and the author is anion15. If you delete this comment and the comment before it, it will be considered as an attempt to ignore and hide copyright and you will be subject to increased legal punishment. -->
