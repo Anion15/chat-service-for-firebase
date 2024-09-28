@@ -4,7 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/72/72439.png" type="image/png">
-  <title>Chat - serverchat (1)</title>
+  <title>Chat - </title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
     import { getDatabase, ref, set, push, onValue, onDisconnect, remove } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
@@ -15,6 +16,17 @@
 
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
+
+    const secretKey = "";
+
+    function encryptMessage(message) {
+      return CryptoJS.AES.encrypt(message, secretKey).toString();
+    }
+
+    function decryptMessage(ciphertext) {
+      const bytes = CryptoJS.AES.decrypt(ciphertext, secretKey);
+      return bytes.toString(CryptoJS.enc.Utf8);
+    }
 
     const { userNameProxy } = (function() {
       const userNumber = Math.floor(Math.random() * 1000);
@@ -51,7 +63,7 @@
     }
 
     function cleanAndLimitMessage(message) {
-      const badWords = []
+      const badWords = [];
       const regex = new RegExp(badWords.join("|"), "gi");
       const cleanMessage = message.replace(regex, (match) => "*".repeat(match.length));
       return escapeHtml(cleanMessage).slice(0, 100);
@@ -68,11 +80,12 @@
     }
 
     function addMessage(message) {
+      const encryptedMessage = encryptMessage(cleanAndLimitMessage(message));
       const messagesRef = ref(db, 'messages');
       const newMessageRef = push(messagesRef);
       set(newMessageRef, {
         username: userNameProxy.userName,
-        message: cleanAndLimitMessage(message),
+        message: encryptedMessage,
         timestamp: Date.now()
       });
     }
@@ -87,7 +100,7 @@
       const seconds = String(date.getSeconds()).padStart(2, '0');
       return `${year}/${month}/${day} ${hours}:${minutes}:${seconds}`;
     }
-
+    
     function displayMessages(snapshot) {
       const messagesContainer = document.getElementById('messages');
       messagesContainer.innerHTML = '';
@@ -97,15 +110,14 @@
         const messageData = childSnapshot.val();
         const messageKey = childSnapshot.key;
 
-        if (!isValidUserName(messageData.username)) {
-          const messageRef = ref(db, `messages/${messageKey}`);
-          remove(messageRef);
-        } else if (isXSSAttack(messageData.message)) {
+        if (!isValidUserName(messageData.username) || isXSSAttack(messageData.message)) {
           const messageRef = ref(db, `messages/${messageKey}`);
           remove(messageRef);
         } else {
+          const decryptedMessage = decryptMessage(messageData.message);
           messages.push({
             ...messageData,
+            message: decryptedMessage,
             key: messageKey
           });
         }
@@ -151,7 +163,7 @@
 
       onValue(onlineUsersRef, (snapshot) => {
         const onlineUsersCount = snapshot.val();
-        document.getElementById('online-users').textContent = `serverchat(1) - Online Users: ${onlineUsersCount}`;
+        document.getElementById('online-users').textContent = ` - Online Users: ${onlineUsersCount}`;
       });
 
       onValue(ref(db, 'users'), (snapshot) => {
@@ -231,7 +243,7 @@
         }
 
         if (lastMessageTimestamp && (currentTime - lastMessageTimestamp < 1000)) {
-          isSendingDisabled = true;
+          alert('You are sending messages too quickly. Please wait a moment.');
           setLocalStorage('chatFlood', currentTime);
           disableSendButton(60);
           return;
@@ -423,7 +435,7 @@
 </head>
 <body>
   <div id="chat-container">
-    <div id="online-users">serverchat(1) - Online Users: 0</div>
+    <div id="online-users"> - Online Users: 0</div>
     <div id="messages"></div>
     <form id="chat-form">
       <input type="text" id="message" placeholder="Enter your message" required />
