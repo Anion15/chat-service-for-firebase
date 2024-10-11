@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
     
     <!--search SEO-->
     <meta property="og:type" content="website">
@@ -13,8 +12,8 @@
     <meta property="og:url" content="http://hello0909.dothome.co.kr/download.html">
 
     <title>Chat Rooms - Interactive</title>
-    <script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=31357"></script>
-    <script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=10810"></script>
+    <script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=82063"></script>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=10810"></script>
     <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/4389/4389181.png" type="image/png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
@@ -39,7 +38,11 @@
             text-align: center;
             box-sizing: border-box;
         }
-        
+        canvas {
+            width: 98vmin;
+            height: 98vmin;
+        }
+
         .loading {
             position: absolute;
             top: 0;
@@ -241,6 +244,7 @@
             style="text-shadow: 0px 0px 10px White">Chat Rooms</h1>
             <p data-aos="fade-up" data-aos-duration="1500" data-aos-delay="300">혁신적인 소통의 시작, Chat Rooms와 함께하세요.</p>
         </div>
+    <canvas id="scene"></canvas>
         <div class="scroll-indicator">
             <p>Scroll Down</p>
             <i class="fa fa-arrow-down"></i>
@@ -259,19 +263,18 @@
             <h2>다양한 플랫폼 지원</h2>
             <p>Android와 Windows에서 ChatRooms를 만나보세요.</p>
             <p>언제 어디서나 간편하게 이용할 수 있습니다.</p>
-            <a style="font-size: 10px;"> (추후 macOS, Linux 지원예정)</a>
+            <a style="font-size: 10px;"> (추후 macOS, Linux 지원예정 2024/12 이후)</a>
         </div>
         <div class="feature" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="400">
             <img src="https://upload.wikimedia.org/wikipedia/commons/5/50/Windows_Defender_logo.svg" alt="Security" width="100" height="100">
             <h2>보안 및 프라이버시</h2>
-            <p>귀하의 개인 정보는 google의 firebase에 안전하게 보호됩니다.</p>
-            <a style="font-size: 10px;"> (추후 AES-256 암호화 지원예정)</a>
+            <p>귀하의 개인 정보는 google의 firebase에 AES-256 암호화로 안전하게 보호됩니다.</p>
         </div>
     </section>
     <section class="download" data-aos="fade-up" data-aos-duration="1000">
         <h2>지금 바로 다운로드하세요</h2>
-        <a onclick="alert('다운로드는 vieepanouie.help@gmail.com에 android라고 요청해주세요.')" class="download-button" data-aos="fade-up" data-aos-delay="300">Download for Android  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" alt="Android logo" width="20" height="20"></a>
-        <a onclick="alert('다운로드는 vieepanouie.help@gmail.com에 windows라고 요청해주세요.')" class="download-button" data-aos="fade-up" data-aos-delay="500">Download for Windows  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" alt="Android logo" width="20" height="20"></a>
+        <a href="http://hello0909.dothome.co.kr/ChatRooms.debug.v3.0.0.apk" class="download-button" data-aos="fade-up" data-aos-delay="300">Download for Android  <img src="https://upload.wikimedia.org/wikipedia/commons/d/d7/Android_robot.svg" alt="Android logo" width="20" height="20"></a>
+        <a href="http://hello0909.dothome.co.kr/chatrooms Setup 4.0.0.exe" class="download-button" data-aos="fade-up" data-aos-delay="500">Download for Windows  <img src="https://upload.wikimedia.org/wikipedia/commons/5/5f/Windows_logo_-_2012.svg" alt="Android logo" width="20" height="20"></a>
     </section>
     <footer>
         <p>Email: <a href="mailto: vieepanouie.help@gmail.com" style="color: #999;">vieepanouie.help@gmail.com</a></p>
@@ -295,6 +298,110 @@
             document.querySelector('.loading').style.visibility = 'hidden'
             document.querySelector('.loading').style.opacity = 0
         }
+
+        console.clear();
+
+const canvas = document.querySelector('#scene');
+canvas.width = canvas.clientWidth;
+canvas.height = canvas.clientHeight;
+const ctx = canvas.getContext('2d');
+
+if (window.devicePixelRatio > 1) {
+    canvas.width = canvas.clientWidth * 2;
+    canvas.height = canvas.clientHeight * 2;
+    ctx.scale(2, 2);
+}
+
+let width = canvas.clientWidth;
+let height = canvas.clientHeight;
+let rotation = 0;
+let dots = [];
+
+const DOTS_AMOUNT = 1000;
+const DOT_RADIUS = 2; // Reduced size
+let GLOBE_RADIUS = width * 0.7;
+let GLOBE_CENTER_Z = -GLOBE_RADIUS;
+let PROJECTION_CENTER_X = width / 2;
+let PROJECTION_CENTER_Y = height / 2;
+let FIELD_OF_VIEW = width * 0.8;
+
+class Dot {
+    constructor(x, y, z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.xProject = 0;
+        this.yProject = 0;
+        this.sizeProjection = 0;
+    }
+    project(sin, cos) {
+        const rotX = cos * this.x + sin * (this.z - GLOBE_CENTER_Z);
+        const rotZ = -sin * this.x + cos * (this.z - GLOBE_CENTER_Z) + GLOBE_CENTER_Z;
+        this.sizeProjection = FIELD_OF_VIEW / (FIELD_OF_VIEW - rotZ);
+        this.xProject = (rotX * this.sizeProjection) + PROJECTION_CENTER_X;
+        this.yProject = (this.y * this.sizeProjection) + PROJECTION_CENTER_Y;
+    }
+    draw(sin, cos) {
+        this.project(sin, cos);
+        ctx.beginPath();
+        ctx.arc(this.xProject, this.yProject, DOT_RADIUS * this.sizeProjection, 0, Math.PI * 2);
+        ctx.closePath();
+        ctx.fillStyle = 'white'; // Set dot color to white
+        ctx.fill();
+    }
+}
+
+function createDots() {
+    dots.length = 0;
+    for (let i = 0; i < DOTS_AMOUNT; i++) {
+        const theta = Math.random() * 2 * Math.PI;
+        const phi = Math.acos((Math.random() * 2) - 1);
+        const x = GLOBE_RADIUS * Math.sin(phi) * Math.cos(theta);
+        const y = GLOBE_RADIUS * Math.sin(phi) * Math.sin(theta);
+        const z = (GLOBE_RADIUS * Math.cos(phi)) + GLOBE_CENTER_Z;
+        dots.push(new Dot(x, y, z));
+    }
+}
+
+function render(a) {
+    ctx.clearRect(0, 0, width, height);
+    rotation = a * 0.0004;
+    const sineRotation = Math.sin(rotation);
+    const cosineRotation = Math.cos(rotation);
+    for (var i = 0; i < dots.length; i++) {
+        dots[i].draw(sineRotation, cosineRotation);
+    }
+    window.requestAnimationFrame(render);
+}
+
+function afterResize() {
+    width = canvas.offsetWidth;
+    height = canvas.offsetHeight;
+    if (window.devicePixelRatio > 1) {
+        canvas.width = canvas.clientWidth * 2;
+        canvas.height = canvas.clientHeight * 2;
+        ctx.scale(2, 2);
+    } else {
+        canvas.width = width;
+        canvas.height = height;
+    }
+    GLOBE_RADIUS = width * 0.7;
+    GLOBE_CENTER_Z = -GLOBE_RADIUS;
+    PROJECTION_CENTER_X = width / 2;
+    PROJECTION_CENTER_Y = height / 2;
+    FIELD_OF_VIEW = width * 0.8;
+    createDots();
+}
+
+let resizeTimeout;
+function onResize() {
+    resizeTimeout = window.clearTimeout(resizeTimeout);
+    resizeTimeout = window.setTimeout(afterResize, 500);
+}
+window.addEventListener('resize', onResize);
+
+createDots();
+window.requestAnimationFrame(render);
     </script>
 </body>
 </html>
