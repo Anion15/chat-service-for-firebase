@@ -163,7 +163,7 @@
 
       onValue(onlineUsersRef, (snapshot) => {
         const onlineUsersCount = snapshot.val();
-        document.getElementById('online-users').textContent = `serverchat(1) - Online Users: ${onlineUsersCount}`;
+        document.getElementById('online-users').textContent = ` - Online Users: ${onlineUsersCount}`;
       });
 
       onValue(ref(db, 'users'), (snapshot) => {
