@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/72/72439.png" type="image/png">
-  <title>Chat - </title>
+  <title>Chat - serverchat (1)</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
@@ -17,7 +17,7 @@
     const app = initializeApp(firebaseConfig);
     const db = getDatabase(app);
 
-    const secretKey = "";
+    const secretKey = "anion15genius";
 
     function encryptMessage(message) {
       return CryptoJS.AES.encrypt(message, secretKey).toString();
@@ -163,7 +163,7 @@
 
       onValue(onlineUsersRef, (snapshot) => {
         const onlineUsersCount = snapshot.val();
-        document.getElementById('online-users').textContent = ` - Online Users: ${onlineUsersCount}`;
+        document.getElementById('online-users').textContent = `serverchat(1) - Online Users: ${onlineUsersCount}`;
       });
 
       onValue(ref(db, 'users'), (snapshot) => {
@@ -435,7 +435,7 @@
 </head>
 <body>
   <div id="chat-container">
-    <div id="online-users"> - Online Users: 0</div>
+    <div id="online-users">serverchat(1) - Online Users: 0</div>
     <div id="messages"></div>
     <form id="chat-form">
       <input type="text" id="message" placeholder="Enter your message" required />
