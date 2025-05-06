@@ -1,7 +1,7 @@
 # ChatRooms
 *혁신적인 소통의 시작, Chat Rooms와 함께하세요*
 
-[자세한 설명은 여기로!](http://hello0909.dothome.co.kr/download.html)
+[자세한 설명은 여기로!](https://hello0909.dothome.co.kr/download.html)
 
 
 
